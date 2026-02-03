@@ -9,8 +9,8 @@ class Funcionario(Base):
     nome = Column(String, nullable=False) 
     cargo = Column(String, nullable=False) 
     foto = Column(LargeBinary) 
-    #certificado_pdf = Column(LargeBinary)
+    certificado_pdf = Column(LargeBinary)
 
     # Geramos o UUID automaticamente se não for fornecido 
-    #uuid_perfil = Column(String, unique=True, default=lambda: str(uuid.uuid4()))
-    #qrcode_img = Column(LargeBinary) 
+    uuid_perfil = Column(String, unique=True, default=lambda: str(uuid.uuid4()))
+    qrcode_img = Column(LargeBinary) 

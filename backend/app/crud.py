@@ -1,22 +1,34 @@
+import qrcode
 import io
-#import uuid
+import uuid
 from sqlalchemy.orm import Session
 from . import models, schemas
 
+def gerar_qrcode_bytes(url_publica: str) -> bytes:
+    qr = qrcode.QRCode(version=1, box_size=10, border=5)
+    qr.add_data(url_publica)
+    qr.make(fit=True)
+    
+    img = qr.make_image(fill_color="black", back_color="white")
+    img_byte_arr = io.BytesIO()
+    img.save(img_byte_arr, format='PNG')
+    return img_byte_arr.getvalue()
 
-def criar_funcionario(db: Session, func: schemas.FuncionarioCreate, foto: bytes | None, pdf: bytes | None ):
 
-    #token_unico = str(uuid.uuid4())
-    #url_perfil = f"{base_url}/perfil/{token_unico}"
-    #qrcode_gerado = gerar_qrcode_bytes(url_perfil)
+
+def criar_funcionario(db: Session, func: schemas.FuncionarioCreate, foto: bytes | None, pdf: bytes | None, base_url: str ):
+
+    token_unico = str(uuid.uuid4())
+    url_perfil = f"{base_url}/perfil/{token_unico}"
+    qrcode_gerado = gerar_qrcode_bytes(url_perfil)
     
     db_func = models.Funcionario(
         nome=func.nome,
         cargo=func.cargo,
         foto=foto,
-        #certificado_pdf=pdf,
-        #uuid_perfil=token_unico, 
-        #qrcode_img=qrcode_gerado
+        certificado_pdf=pdf,
+        uuid_perfil=token_unico, 
+        qrcode_img=qrcode_gerado
     )
 
     db.add(db_func)
