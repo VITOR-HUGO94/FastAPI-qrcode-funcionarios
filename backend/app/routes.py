@@ -5,6 +5,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from .database import SessionLocal
 from . import crud, schemas
+from fastapi import HTTPException
 
 router = APIRouter()
 
@@ -46,3 +47,14 @@ async def cadastrar_funcionario(
     crud.criar_funcionario(db, obj_create, foto_bytes, pdf_bytes, base_url="http://localhost:8000")
 
     return RedirectResponse(url="/", status_code=303)
+@router.get("/perfil/{uuid_perfil}", response_class=HTMLResponse)
+async def visualizar_perfil(request: Request, uuid_perfil: str, db: Session = Depends(get_db)):
+    # 1. Busca o funcionário pelo UUID (usando a função do CRUD)
+    funcionario = crud.buscar_por_uuid(db, uuid_perfil)
+    
+    # 2. Se não encontrar, lança erro 404
+    if not funcionario:
+        raise HTTPException(status_code=404, detail="Funcionário não encontrado")
+    
+    # 3. Renderiza o template exclusivo de perfil
+    return templates.TemplateResponse("perfil.html", {"request": request, "f": funcionario})
