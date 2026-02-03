@@ -14,3 +14,9 @@ class Funcionario(Base):
     # Geramos o UUID automaticamente se não for fornecido 
     uuid_perfil = Column(String, unique=True, default=lambda: str(uuid.uuid4()))
     qrcode_img = Column(LargeBinary) 
+
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True, index=True)
+    hashed_password = Column(String)

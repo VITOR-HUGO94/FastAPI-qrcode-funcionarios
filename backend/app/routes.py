@@ -2,10 +2,12 @@ import base64
 from fastapi import APIRouter, Depends, UploadFile, File, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
+from backend.app.models import User
 from sqlalchemy.orm import Session
 from .database import SessionLocal
 from . import crud, schemas
 from fastapi import HTTPException
+from .auth import get_current_user
 
 router = APIRouter()
 
@@ -37,7 +39,9 @@ async def cadastrar_funcionario(
     cargo: str = Form(...),
     foto: UploadFile = File(None),
     certificado: UploadFile = File(None),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+    
 ):
     foto_bytes = await foto.read() if foto else None
     pdf_bytes = await certificado.read() if certificado else None
@@ -58,3 +62,4 @@ async def visualizar_perfil(request: Request, uuid_perfil: str, db: Session = De
     
     # 3. Renderiza o template exclusivo de perfil
     return templates.TemplateResponse("perfil.html", {"request": request, "f": funcionario})
+
