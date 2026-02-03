@@ -10,7 +10,7 @@ class FuncionarioCreate(FuncionarioBase):
 
 class Funcionario(FuncionarioBase):
     id: int 
-    uuid_perfil: str 
+    #uuid_perfil: str 
 
     class Config:
         # Essencial para que o Pydantic entenda objetos do SQLAlchemy 
