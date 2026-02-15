@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Perfil Público - {{ f.nome }}</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: auto; padding: 20px; }
+        .foto-perfil { width: 150px; border-radius: 8px; margin-bottom: 10px; }
+        .pdf-view { width: 100%; height: 600px; border: 1px solid #ccc; margin-top: 10px; }
+        .btn-download { display: inline-block; padding: 10px; background: #28a745; color: white; text-decoration: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Cartão de Identificação</h1>
+    <hr>
+
+    {% if f.foto %}
+        <img src="data:image/jpeg;base64,{{ f.foto | b64encode }}" class="foto-perfil">
+    {% endif %}
+
+    <p><strong>Nome:</strong> {{ f.nome }}</p>
+    <p><strong>Cargo:</strong> {{ f.cargo }}</p>
+
+    <h3>Certificado Profissional:</h3>
+    {% if f.certificado_pdf %}
+        <a href="data:application/pdf;base64,{{ f.certificado_pdf | b64encode }}" 
+           download="certificado_{{ f.nome }}.pdf" 
+           class="btn-download">
+           📥 Baixar Certificado (PDF)
+        </a>
+        <br>
+        <embed src="data:application/pdf;base64,{{ f.certificado_pdf | b64encode }}" 
+               type="application/pdf" 
+               class="pdf-view">
+    {% else %}
+        <p><em>Nenhum certificado cadastrado para este funcionário.</em></p>
+    {% endif %}
+
+    <hr>
+    <h3>QR Code de Validação:</h3>
+    {% if f.qrcode_img %}
+        <img src="data:image/png;base64,{{ f.qrcode_img | b64encode }}" width="120">
+    {% endif %}
+</body>
+</html>

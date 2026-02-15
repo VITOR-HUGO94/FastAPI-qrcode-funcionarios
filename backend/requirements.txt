@@ -5,3 +5,6 @@ psycopg2-binary
 jinja2
 python-multipart
 qrcode[pil]
+python-jose[cryptography]  # Adicionado para JWT
+passlib[bcrypt]            # Adicionado para Hash de senhas
+pillow

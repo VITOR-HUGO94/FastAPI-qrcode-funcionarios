@@ -62,3 +62,6 @@ def atualizar_funcionario(db: Session, funcionario_id: int, func_update: schemas
         db.commit()
         db.refresh(db_func)
     return db_func
+
+def buscar_por_uuid(db: Session, uuid_perfil: str):
+    return db.query(models.Funcionario).filter(models.Funcionario.uuid_perfil == uuid_perfil).first()

@@ -1,0 +1,22 @@
+<form id="loginForm">
+    <input type="text" name="username" placeholder="Usuário" required>
+    <input type="password" name="password" placeholder="Senha" required>
+    <button type="submit">Entrar</button>
+</form>
+
+<script>
+document.getElementById('loginForm').onsubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const response = await fetch('/token', { method: 'POST', body: formData });
+    
+    if (response.ok) {
+        const data = await response.json();
+        // Guardamos o token no localStorage para usar nas próximas chamadas
+        localStorage.setItem('token', data.access_token);
+        window.location.href = '/'; // Redireciona para a lista
+    } else {
+        alert('Falha no login!');
+    }
+};
+</script>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Funcionário</title>
+</head>
+<body>
+    <h1>Editar: {{ f.nome }}</h1>
+    <form action="/atualizar/{{ f.id }}" method="post" enctype="multipart/form-data">
+        Nome: <input name="nome" value="{{ f.nome }}"><br><br>
+        Cargo: <input name="cargo" value="{{ f.cargo }}"><br><br>
+        Foto Atual: (Envie uma nova para trocar) <input type="file" name="foto"><br><br>
+        Certificado PDF: <input type="file" name="certificado"><br><br>
+        <button type="submit">Salvar Alterações</button>
+        <a href="/">Cancelar</a>
+    </form>
+</body>
+</html>

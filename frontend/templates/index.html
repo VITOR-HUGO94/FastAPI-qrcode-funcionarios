@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Administração de Funcionários</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        .img-thumb { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; }
+        .qr-thumb { width: 80px; height: 80px; }
+        .btn { padding: 8px 12px; background: #007bff; color: white; text-decoration: none; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>Painel Administrativo - Funcionários</h1>
+    
+    <a href="/novo" class="btn">➕ Cadastrar Novo Funcionário</a>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Foto</th>
+                <th>Nome</th>
+                <th>Cargo</th>
+                <th>QR Code (Link Público)</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for f in funcionarios %}
+            <tr>
+                <td>
+                    {% if f.foto %}
+                        <img src="data:image/jpeg;base64,{{ f.foto | b64encode }}" class="img-thumb">
+                    {% else %}
+                        <span>Sem foto</span>
+                    {% endif %}
+                </td>
+                <td>{{ f.nome }}</td> <td>{{ f.cargo }}</td> <td>
+                    {% if f.qrcode_img %}
+                        <img src="data:image/png;base64,{{ f.qrcode_img | b64encode }}" class="qr-thumb">
+                        <br>
+                        <small style="font-size: 0.7em;">Aponte a câmera para testar</small>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="/perfil/{{ f.uuid_perfil }}" target="_blank">Visualizar Perfil</a>
+                </td>
+                <td>
+                    <a href="/perfil/{{ f.uuid_perfil }}" target="_blank" class="btn" style="background:#17a2b8">👁️ Ver</a>
+                    <a href="/editar/{{ f.id }}" class="btn" style="background:#ffc107; color:black">✏️ Editar</a>
+                    <form action="/excluir/{{ f.id }}" method="post" style="display:inline;" onsubmit="return confirm('Excluir permanentemente?')">
+                        <button type="submit" class="btn" style="background:#dc3545; border:none; cursor:pointer">🗑️ Excluir</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if not funcionarios %}
+        <p>Nenhum funcionário cadastrado no sistema.</p>
+    {% endif %}
+</body>
+</html>

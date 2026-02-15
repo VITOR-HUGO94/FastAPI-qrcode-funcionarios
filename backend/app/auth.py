@@ -6,9 +6,10 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from . import models, database
+from .database import get_db
 
 # Configurações (Idealmente via .env)
-SECRET_KEY = os.getenv("SECRET_KEY", "root@6699")
+SECRET_KEY = os.getenv("SECRET_KEY", "uma-chave-muito-secreta")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
@@ -30,7 +31,7 @@ def criar_token_acesso(data: dict):
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 # A Dependência que você usará nas rotas
-async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(database.get_db)):
+async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Credenciais inválidas",
