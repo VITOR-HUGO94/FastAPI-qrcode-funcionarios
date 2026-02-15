@@ -66,3 +66,9 @@ Interface Web: http://localhost:8000
 Documentação Swagger: http://localhost:8000/docs
 
 Verificação de Status: GET /health
+
+
+## 🐳 Run with Docker
+
+```bash
+docker-compose up --build
